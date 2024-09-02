@@ -11,12 +11,27 @@ pub const SAYAKA_DEBUG: Lazy<bool> = Lazy::new(|| {
     }
 });
 
+pub const SAYAKA_NO_COLOR: Lazy<bool> = Lazy::new(|| {
+    match env::var("SAYAKA_NO_COLOR") {
+        Ok(value) => {
+            if value.parse::<u8>().unwrap() > 0 { true } else { false }
+        }
+        Err(_) => false
+    }
+});
+
 // For external package macro
 #[macro_export]
 macro_rules! debugln {
     ($($arg:tt)*) => {{
         if *sayaka::debugger::SAYAKA_DEBUG {
-            eprint!("[{}][{}]", "DEBUG".green(), format!("{}:{}", file!(), line!()).cyan());
+            let now = chrono::Local::now();
+            let timestamp = now.format("%Y-%m-%d %H:%M:%S").to_string();
+            if *sayaka::debugger::SAYAKA_NO_COLOR {
+                eprint!("[{}][{}][{}]", "DEBUG", timestamp, format!("{}:{}", file!(), line!()));
+            } else {
+                eprint!("[{}][{}][{}]", "DEBUG".green(), timestamp.yellow(), format!("{}:{}", file!(), line!()).cyan());
+            }
             eprint!(" ");
             eprintln!($($arg)*);
         }
@@ -32,7 +47,12 @@ macro_rules! debug_fn {
         }
         let name = type_name_of(f);
         if *sayaka::debugger::SAYAKA_DEBUG {
-            eprint!("[{}][{}]", "DEBUG".green(), format!("{}:{}", file!(), line!()).cyan());
+            let now = chrono::Local::now();
+            let timestamp = now.format("%Y-%m-%d %H:%M:%S").to_string();if *sayaka::debugger::SAYAKA_NO_COLOR {
+                eprint!("[{}][{}][{}]", "DEBUG", timestamp, format!("{}:{}", file!(), line!()));
+            } else {
+                eprint!("[{}][{}][{}]", "DEBUG".green(), timestamp.yellow(), format!("{}:{}", file!(), line!()).cyan());
+            }
             eprint!(" Calling {}(),", name.strip_suffix("::f").unwrap());
             $(
                 {
@@ -50,7 +70,13 @@ macro_rules! debug_var {
         if *sayaka::debugger::SAYAKA_DEBUG {
             $(
                 {
-                    eprint!("[{}][{}]", "DEBUG".green(), format!("{}:{}", file!(), line!()).cyan());
+                    let now = chrono::Local::now();
+                    let timestamp = now.format("%Y-%m-%d %H:%M:%S").to_string();
+                    if *sayaka::debugger::SAYAKA_NO_COLOR {
+                        eprint!("[{}][{}][{}]", "DEBUG", timestamp, format!("{}:{}", file!(), line!()));
+                    } else {
+                        eprint!("[{}][{}][{}]", "DEBUG".green(), timestamp.yellow(), format!("{}:{}", file!(), line!()).cyan());
+                    }
                     eprint!(" ");
                     eprint!("{:?} = {:#?}",stringify!($expression),&$expression);
                     eprintln!();
@@ -70,7 +96,13 @@ macro_rules! debug_fn_inline {
         }
         let name = type_name_of(f);
         if *crate::debugger::SAYAKA_DEBUG {
-            eprint!("[{}][{}]", "DEBUG".green(), format!("{}:{}", file!(), line!()).cyan());
+            let now = chrono::Local::now();
+            let timestamp = now.format("%Y-%m-%d %H:%M:%S").to_string();
+            if *crate::debugger::SAYAKA_NO_COLOR {
+                eprint!("[{}][{}][{}]", "DEBUG", timestamp, format!("{}:{}", file!(), line!()));
+            } else {
+                eprint!("[{}][{}][{}]", "DEBUG".green(), timestamp.yellow(), format!("{}:{}", file!(), line!()).cyan());
+            }
             eprint!(" Calling {}(),", name.strip_suffix("::f").unwrap());
             $(
                 {
@@ -86,7 +118,13 @@ macro_rules! debug_fn_inline {
 macro_rules! debugln_inline {
     ($($arg:tt)*) => {{
         if *crate::debugger::SAYAKA_DEBUG {
-            eprint!("[{}][{}]", "DEBUG".green(), format!("{}:{}", file!(), line!()).cyan());
+            let now = chrono::Local::now();
+            let timestamp = now.format("%Y-%m-%d %H:%M:%S").to_string();
+            if *crate::debugger::SAYAKA_NO_COLOR {
+                eprint!("[{}][{}][{}]", "DEBUG", timestamp, format!("{}:{}", file!(), line!()));
+            } else {
+                eprint!("[{}][{}][{}]", "DEBUG".green(), timestamp.yellow(), format!("{}:{}", file!(), line!()).cyan());
+            }
             eprint!(" ");
             eprintln!($($arg)*);
         }
@@ -99,7 +137,13 @@ macro_rules! debug_var_inline {
         if *crate::debugger::SAYAKA_DEBUG {
             $(
                 {
-                    eprint!("[{}][{}]", "DEBUG".green(), format!("{}:{}", file!(), line!()).cyan());
+                    let now = chrono::Local::now();
+                    let timestamp = now.format("%Y-%m-%d %H:%M:%S").to_string();
+                    if *crate::debugger::SAYAKA_NO_COLOR {
+                        eprint!("[{}][{}][{}]", "DEBUG", timestamp, format!("{}:{}", file!(), line!()));
+                    } else {
+                        eprint!("[{}][{}][{}]", "DEBUG".green(), timestamp.yellow(), format!("{}:{}", file!(), line!()).cyan());
+                    }
                     eprint!(" ");
                     eprint!("{:?} = {:#?}",stringify!($expression),&$expression);
                     eprintln!();
