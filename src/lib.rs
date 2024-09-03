@@ -3,7 +3,6 @@ pub mod debugger;
 #[cfg(test)]
 mod tests {
     use super::*;
-    use colored::*;
 
     #[test]
     fn test_debug_all() {

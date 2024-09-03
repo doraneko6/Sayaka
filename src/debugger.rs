@@ -1,7 +1,7 @@
 use std::env;
 
-use once_cell::sync::Lazy;
 use colored::Colorize;
+use once_cell::sync::Lazy;
 
 pub const SAYAKA_DEBUG: Lazy<bool> = Lazy::new(|| {
     match env::var("SAYAKA_DEBUG") {
@@ -21,7 +21,7 @@ pub const SAYAKA_NO_COLOR: Lazy<bool> = Lazy::new(|| {
     }
 });
 
-pub fn log_debug(colored:bool) {
+pub fn log_debug(colored: bool) {
     let now = chrono::Local::now();
     let timestamp = now.format("%Y-%m-%d %H:%M:%S").to_string();
     if colored {
