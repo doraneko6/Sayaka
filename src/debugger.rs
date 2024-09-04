@@ -21,13 +21,13 @@ pub const SAYAKA_NO_COLOR: Lazy<bool> = Lazy::new(|| {
     }
 });
 
-pub fn log_debug(colored:bool) {
+pub fn log_debug(colored:bool,file:&'static str,line:u32) {
     let now = chrono::Local::now();
     let timestamp = now.format("%Y-%m-%d %H:%M:%S").to_string();
     if colored {
-        eprint!("[{}][{}][{}]", "DEBUG".green(), timestamp.yellow(), format!("{}:{}", file!(), line!()).cyan());
+        eprint!("[{}][{}][{}]", "DEBUG".green(), timestamp.yellow(), format!("{}:{}", file, line).cyan());
     } else {
-        eprint!("[{}][{}][{}]", "DEBUG".green(), timestamp.yellow(), format!("{}:{}", file!(), line!()).cyan());
+        eprint!("[{}][{}][{}]", "DEBUG".green(), timestamp.yellow(), format!("{}:{}", file, line).cyan());
     }
 }
 
@@ -37,9 +37,9 @@ macro_rules! debugln {
     ($($arg:tt)*) => {{
         if *sayaka::debugger::SAYAKA_DEBUG {
             if *sayaka::debugger::SAYAKA_NO_COLOR {
-                sayaka::debugger::log_debug(false);
+                sayaka::debugger::log_debug(false, file!(), line!());
             } else {
-                sayaka::debugger::log_debug(true);
+                sayaka::debugger::log_debug(true, file!(), line!());
             }
             eprint!(" ");
             eprintln!($($arg)*);
@@ -57,9 +57,9 @@ macro_rules! debug_fn {
         let name = type_name_of(f);
         if *sayaka::debugger::SAYAKA_DEBUG {
             if *sayaka::debugger::SAYAKA_NO_COLOR {
-                sayaka::debugger::log_debug(false);
+                sayaka::debugger::log_debug(false,file!(),line!());
             } else {
-                sayaka::debugger::log_debug(true);
+                sayaka::debugger::log_debug(true,file!(),line!());
             }
             eprint!(" Calling {}(),", name.strip_suffix("::f").unwrap());
             $(
@@ -79,9 +79,9 @@ macro_rules! debug_var {
             $(
                 {
                     if *sayaka::debugger::SAYAKA_NO_COLOR {
-                        sayaka::debugger::log_debug(false);
+                        sayaka::debugger::log_debug(false, file!(), line!());
                     } else {
-                        sayaka::debugger::log_debug(true);
+                        sayaka::debugger::log_debug(true, file!(), line!());
                     }
                     eprint!(" ");
                     eprint!("{:?} = {:#?}",stringify!($expression),&$expression);
@@ -103,9 +103,9 @@ macro_rules! debug_fn_inline {
         let name = type_name_of(f);
         if *crate::debugger::SAYAKA_DEBUG {
             if *crate::debugger::SAYAKA_NO_COLOR {
-                crate::debugger::log_debug(true);
+                crate::debugger::log_debug(false, file!(), line!());
             } else {
-                crate::debugger::log_debug(true);
+                crate::debugger::log_debug(true, file!(), line!());
             }
             eprint!(" Calling {}(),", name.strip_suffix("::f").unwrap());
             $(
@@ -123,9 +123,9 @@ macro_rules! debugln_inline {
     ($($arg:tt)*) => {{
         if *crate::debugger::SAYAKA_DEBUG {
             if *crate::debugger::SAYAKA_NO_COLOR {
-                crate::debugger::log_debug(true);
+                crate::debugger::log_debug(false, file!(), line!());
             } else {
-                crate::debugger::log_debug(true);
+                crate::debugger::log_debug(true, file!(), line!());
             }
             eprint!(" ");
             eprintln!($($arg)*);
@@ -140,9 +140,9 @@ macro_rules! debug_var_inline {
             $(
                 {
                     if *crate::debugger::SAYAKA_NO_COLOR {
-                        crate::debugger::log_debug(true);
+                        crate::debugger::log_debug(false, file!(), line!());
                     } else {
-                        crate::debugger::log_debug(true);
+                        crate::debugger::log_debug(true, file!(), line!());
                     }
                     eprint!(" ");
                     eprint!("{:?} = {:#?}",stringify!($expression),&$expression);
