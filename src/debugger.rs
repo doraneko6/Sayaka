@@ -56,8 +56,7 @@ macro_rules! debug_fn {
         }
         let name = type_name_of(f);
         if *sayaka::debugger::SAYAKA_DEBUG {
-            let now = chrono::Local::now();
-            let timestamp = now.format("%Y-%m-%d %H:%M:%S").to_string();if *sayaka::debugger::SAYAKA_NO_COLOR {
+            if *sayaka::debugger::SAYAKA_NO_COLOR {
                 sayaka::debugger::log_debug(false);
             } else {
                 sayaka::debugger::log_debug(true);
@@ -79,8 +78,6 @@ macro_rules! debug_var {
         if *sayaka::debugger::SAYAKA_DEBUG {
             $(
                 {
-                    let now = chrono::Local::now();
-                    let timestamp = now.format("%Y-%m-%d %H:%M:%S").to_string();
                     if *sayaka::debugger::SAYAKA_NO_COLOR {
                         sayaka::debugger::log_debug(false);
                     } else {
@@ -105,8 +102,6 @@ macro_rules! debug_fn_inline {
         }
         let name = type_name_of(f);
         if *crate::debugger::SAYAKA_DEBUG {
-            let now = chrono::Local::now();
-            let timestamp = now.format("%Y-%m-%d %H:%M:%S").to_string();
             if *crate::debugger::SAYAKA_NO_COLOR {
                 crate::debugger::log_debug(true);
             } else {
@@ -127,8 +122,6 @@ macro_rules! debug_fn_inline {
 macro_rules! debugln_inline {
     ($($arg:tt)*) => {{
         if *crate::debugger::SAYAKA_DEBUG {
-            let now = chrono::Local::now();
-            let timestamp = now.format("%Y-%m-%d %H:%M:%S").to_string();
             if *crate::debugger::SAYAKA_NO_COLOR {
                 crate::debugger::log_debug(true);
             } else {
@@ -146,8 +139,6 @@ macro_rules! debug_var_inline {
         if *crate::debugger::SAYAKA_DEBUG {
             $(
                 {
-                    let now = chrono::Local::now();
-                    let timestamp = now.format("%Y-%m-%d %H:%M:%S").to_string();
                     if *crate::debugger::SAYAKA_NO_COLOR {
                         crate::debugger::log_debug(true);
                     } else {
