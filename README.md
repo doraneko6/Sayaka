@@ -14,7 +14,7 @@ Add the dependency to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-sayaka = "0.1.0"
+sayaka = "0.2.0"
 ```
 
 or use the cargo command in you commandline.
