@@ -1,33 +1,47 @@
 use std::env;
 
-use once_cell::sync::Lazy;
 use colored::Colorize;
+use once_cell::sync::Lazy;
 
-pub const SAYAKA_DEBUG: Lazy<bool> = Lazy::new(|| {
-    match env::var("SAYAKA_DEBUG") {
-        Ok(value) => {
-            if value.parse::<u8>().unwrap() > 0 { true } else { false }
+pub const SAYAKA_DEBUG: Lazy<bool> = Lazy::new(|| match env::var("SAYAKA_DEBUG") {
+    Ok(value) => {
+        if value.parse::<u8>().unwrap() > 0 {
+            true
+        } else {
+            false
         }
-        Err(_) => false
     }
+    Err(_) => false,
 });
 
-pub const SAYAKA_NO_COLOR: Lazy<bool> = Lazy::new(|| {
-    match env::var("SAYAKA_NO_COLOR") {
-        Ok(value) => {
-            if value.parse::<u8>().unwrap() > 0 { true } else { false }
+pub const SAYAKA_NO_COLOR: Lazy<bool> = Lazy::new(|| match env::var("SAYAKA_NO_COLOR") {
+    Ok(value) => {
+        if value.parse::<u8>().unwrap() > 0 {
+            true
+        } else {
+            false
         }
-        Err(_) => false
     }
+    Err(_) => false,
 });
 
-pub fn log_debug(colored:bool,file:&'static str,line:u32) {
+pub fn log_debug(colored: bool, file: &'static str, line: u32) {
     let now = chrono::Local::now();
     let timestamp = now.format("%Y-%m-%d %H:%M:%S").to_string();
     if colored {
-        eprint!("[{}][{}][{}]", "DEBUG".green(), timestamp.yellow(), format!("{}:{}", file, line).cyan());
+        eprint!(
+            "[{}][{}][{}]",
+            "DEBUG".green(),
+            timestamp.yellow(),
+            format!("{}:{}", file, line).cyan()
+        );
     } else {
-        eprint!("[{}][{}][{}]", "DEBUG".green(), timestamp.yellow(), format!("{}:{}", file, line).cyan());
+        eprint!(
+            "[{}][{}][{}]",
+            "DEBUG",
+            timestamp,
+            format!("{}:{}", file, line)
+        );
     }
 }
 
